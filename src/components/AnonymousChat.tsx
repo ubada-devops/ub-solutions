@@ -9,6 +9,7 @@ import {
 import { SessionRole } from '../types';
 import { FASTAPI_ASGI_METRICS, REDIS_CLUSTER_NODES, SUPABASE_TOPOLOGY, HSM_VAULT_DATA, EDGE_REPLICAS } from '../data';
 import { apiService } from '../lib/api';
+import { supabase, isSupabaseConfigured } from '../supabaseClient';
 
 interface Message {
   id: string;
@@ -159,6 +160,47 @@ export const AnonymousChat: React.FC<AnonymousChatProps> = ({
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, activeChannel]);
+
+  // Load chat messages from Supabase on init & subscribe to real-time updates
+  useEffect(() => {
+    if (!isSupabaseConfigured) return;
+
+    const loadMessages = async () => {
+      const dbMsgs = await apiService.fetchChatMessages();
+      if (dbMsgs && dbMsgs.length > 0) {
+        setMessages(dbMsgs);
+      }
+    };
+    loadMessages();
+
+    // Subscribe to new message inserts in Supabase
+    const chatChannel = supabase
+      .channel('chat_realtime_changes')
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'chat_messages' },
+        (payload) => {
+          const newMsg = payload.new as any;
+          setMessages(prev => {
+            if (prev.some(m => m.id === newMsg.id)) return prev;
+            const msg: Message = {
+              id: newMsg.id,
+              channel_id: newMsg.channel_id,
+              sender_alias: newMsg.sender_alias,
+              payload: newMsg.payload,
+              timestamp: Number(newMsg.timestamp),
+              isSystem: newMsg.isSystem
+            };
+            return [...prev, msg].slice(-50);
+          });
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(chatChannel);
+    };
+  }, []);
 
   // 30s Heartbeat Ping-Pong Protocol simulator
   useEffect(() => {

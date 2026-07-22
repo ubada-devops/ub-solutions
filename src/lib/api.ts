@@ -132,10 +132,25 @@ class ApiService {
   }
 
   // Chat Messages
-  public async fetchChatMessages(): Promise<ChatMessagePayload[] | null> {
+  public async fetchChatMessages(): Promise<any[] | null> {
     if (isSupabaseConfigured && supabase) {
-      const { data, error } = await supabase.from('chat_messages').select('*').order('created_at', { ascending: true }).limit(100);
-      if (!error && data) return data as ChatMessagePayload[];
+      const { data, error } = await supabase
+        .from('chat_messages')
+        .select('*')
+        .order('timestamp', { ascending: true })
+        .limit(100);
+      
+      if (!error && data) {
+        // Map database columns to Message format expected by client
+        return data.map(item => ({
+          id: item.id,
+          channel_id: item.channel_id,
+          sender_alias: item.sender_alias,
+          payload: item.payload,
+          timestamp: Number(item.timestamp),
+          isSystem: item.isSystem
+        }));
+      }
     }
     try {
       const res = await fetch(`${API_BASE}/chat`);
@@ -146,7 +161,18 @@ class ApiService {
 
   public async sendChatMessage(msg: ChatMessagePayload) {
     if (isSupabaseConfigured && supabase) {
-      await supabase.from('chat_messages').insert([msg]);
+      const dbMsg = {
+        id: msg.id || 'msg_' + Math.random().toString(36).substring(2, 11),
+        channel_id: msg.channel,
+        sender_alias: msg.sender,
+        payload: msg.text,
+        timestamp: Date.now(),
+        isSystem: msg.type === 'system'
+      };
+      const { error } = await supabase.from('chat_messages').insert([dbMsg]);
+      if (error) {
+        console.error('[Supabase] Chat insert error:', error);
+      }
     }
     if (this.socket && this.socket.readyState === WebSocket.OPEN) {
       this.socket.send(JSON.stringify({ type: 'SEND_MESSAGE', payload: msg }));
