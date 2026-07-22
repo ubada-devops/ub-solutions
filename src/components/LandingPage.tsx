@@ -60,20 +60,22 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigateToLogin, onN
 
   const services = [
     {
-      icon: <Code2 size={28} />,
-      title: 'Full-Stack Development',
-      desc: 'React, Next.js, Node.js, Python, FastAPI — enterprise-grade web and mobile applications built by senior engineers.',
-      features: ['Custom Web Apps', 'API Development', 'Mobile (React Native)', 'Cloud Architecture'],
-      gradient: 'from-emerald-500 to-cyan-500',
-      image: '/images/service_fullstack.png'
-    },
-    {
       icon: <Brain size={28} />,
-      title: 'AI & Automation',
+      title: 'AI Automations',
       desc: 'Custom GPT integrations, workflow automation, RAG pipelines, and intelligent agents that save 100+ hours/month.',
       features: ['Custom AI Agents', 'Workflow Bots', 'RAG Pipelines', 'Predictive Analytics'],
-      gradient: 'from-violet-500 to-purple-500',
+      gradient: 'from-emerald-500 to-cyan-500',
+      whatsappText: 'i want to knoe more about ai automations',
       image: '/images/service_ai.png'
+    },
+    {
+      icon: <Code2 size={28} />,
+      title: 'Website + App',
+      desc: 'React, Next.js, Node.js, Python, FastAPI — enterprise-grade web and mobile applications built by senior engineers.',
+      features: ['Custom Web Apps', 'API Development', 'Mobile (React Native)', 'Cloud Architecture'],
+      gradient: 'from-violet-500 to-purple-500',
+      whatsappText: 'i want to knoe more about website and apps',
+      image: '/images/service_fullstack.png'
     },
     {
       icon: <Megaphone size={28} />,
@@ -81,32 +83,18 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigateToLogin, onN
       desc: 'Performance marketing, SEO, Meta/Google Ads, lead generation funnels — ROI-driven campaigns for real growth.',
       features: ['Meta & Google Ads', 'SEO & Content', 'Lead Gen Funnels', 'Analytics & CRO'],
       gradient: 'from-orange-500 to-rose-500',
+      whatsappText: 'i want to knoe more about digital marketing',
       image: '/images/service_marketing.png'
     },
     {
-      icon: <Palette size={28} />,
-      title: 'UI/UX Design',
-      desc: 'Figma-first design systems, conversion-optimized interfaces, and brand identity that speaks volumes.',
-      features: ['Design Systems', 'Brand Identity', 'Prototyping', 'User Research'],
+      icon: <Sparkles size={28} />,
+      title: 'Enquire about new services',
+      desc: 'Need custom solutions? We build tailormade software architectures, custom LLMs, DevOps pipelines, and data systems.',
+      features: ['Custom Software Design', 'Consulting & Strategy', 'New Tech Implementations', 'Dedicated Team Setup'],
       gradient: 'from-pink-500 to-fuchsia-500',
+      whatsappText: 'i want to enquire about new services',
       image: '/images/service_design.png'
-    },
-    {
-      icon: <Shield size={28} />,
-      title: 'DevOps & Security',
-      desc: 'CI/CD pipelines, infrastructure-as-code, SOC-2 compliance audits, and zero-trust architectures.',
-      features: ['CI/CD Pipelines', 'Cloud Infra (AWS/GCP)', 'Security Audits', 'Monitoring'],
-      gradient: 'from-sky-500 to-blue-500',
-      image: '/images/service_devops.png'
-    },
-    {
-      icon: <Database size={28} />,
-      title: 'Data Engineering',
-      desc: 'ETL pipelines, data warehousing, real-time dashboards, and analytics infrastructure at scale.',
-      features: ['Data Pipelines', 'Warehousing', 'BI Dashboards', 'Real-time Streams'],
-      gradient: 'from-teal-500 to-emerald-500',
-      image: '/images/service_data.png'
-    },
+    }
   ];
 
   const testimonials = [
@@ -345,6 +333,16 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigateToLogin, onN
                       </div>
                     ))}
                   </div>
+
+                  {/* Enquire Now Action Button */}
+                  <a
+                    href={`https://wa.me/917483956344?text=${encodeURIComponent(service.whatsappText)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-5 w-full py-2 bg-zinc-900 hover:bg-emerald-500 hover:text-black border border-zinc-800 hover:border-emerald-400 text-zinc-400 hover:font-bold text-[9px] uppercase tracking-wider font-mono rounded flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                  >
+                    Enquire Now
+                  </a>
                 </div>
               </div>
             ))}
@@ -605,10 +603,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigateToLogin, onN
       {/* Bottom Center: Call Now */}
       <a
         href="tel:+917483956344"
-        className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-12 py-4 bg-emerald-500 hover:bg-emerald-400 text-black font-mono font-bold text-lg uppercase tracking-wider rounded shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] transition-all flex items-center gap-3.5 cursor-pointer border border-emerald-400"
+        className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-6 py-3 bg-emerald-500 hover:bg-emerald-400 text-black font-mono font-bold text-[10px] uppercase tracking-wider rounded shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] transition-all flex items-center gap-2 cursor-pointer border border-emerald-400"
       >
-        <Phone size={24} />
-        Call Now
+        <Phone size={12} />
+        Free Online Consulting Now
       </a>
 
       {/* Bottom Right: Anonymous Chat Shortcut */}
