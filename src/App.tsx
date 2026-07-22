@@ -153,7 +153,16 @@ export default function App() {
 
   // If landing page is showing, render the public storefront
   if (showLanding && !isAuthenticated) {
-    return <LandingPage onNavigateToLogin={() => setShowLanding(false)} />;
+    return (
+      <LandingPage 
+        onNavigateToLogin={() => setShowLanding(false)} 
+        onNavigateToChat={() => {
+          setIsAuthenticated(true);
+          setActiveRole('CHAT');
+          setShowLanding(false);
+        }}
+      />
+    );
   }
 
   return (

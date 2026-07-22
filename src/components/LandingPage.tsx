@@ -4,15 +4,16 @@ import {
   Globe, Shield, Zap, Users, Star, ChevronRight, Monitor,
   Smartphone, Database, Cloud, Cpu, LineChart, Rocket,
   CheckCircle2, ArrowUpRight, Menu, X, Sparkles,
-  TrendingUp, Lock, Layers, GitBranch, Target
+  TrendingUp, Lock, Layers, GitBranch, Target, MessageSquare
 } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
 
 interface LandingPageProps {
   onNavigateToLogin: () => void;
+  onNavigateToChat?: () => void;
 }
 
-export const LandingPage: React.FC<LandingPageProps> = ({ onNavigateToLogin }) => {
+export const LandingPage: React.FC<LandingPageProps> = ({ onNavigateToLogin, onNavigateToChat }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeService, setActiveService] = useState(0);
   const [scrollY, setScrollY] = useState(0);
@@ -120,13 +121,15 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigateToLogin }) =
       {/* ═══════════════════ NAVBAR ═══════════════════ */}
       <nav className="fixed top-0 left-0 right-0 z-[100] border-b border-zinc-900/60 bg-zinc-950/80 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-emerald-500 flex items-center justify-center rounded-lg shadow-[0_0_20px_rgba(16,185,129,0.3)]">
-              <Terminal size={18} className="text-black" />
+          <div 
+            onClick={() => { window.scrollTo({ top: 0, behavior: 'smooth' }); window.location.reload(); }}
+            className="flex items-center gap-3 cursor-pointer hover:opacity-85 select-none"
+          >
+            <div className="w-10 h-10 bg-emerald-500 flex items-center justify-center rounded-lg shadow-[0_0_20px_rgba(16,185,129,0.3)]">
+              <Terminal size={20} className="text-black" />
             </div>
             <div className="flex flex-col">
-              <span className="text-sm font-bold tracking-tight text-white">UB Solutions</span>
-              <span className="text-[8px] text-emerald-500 font-bold tracking-[0.2em] uppercase">Tech • AI • Growth</span>
+              <span className="text-xl font-bold tracking-tight text-white">UB Solutions</span>
             </div>
           </div>
 
@@ -586,6 +589,29 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigateToLogin }) =
           </div>
         </div>
       </footer>
+
+      {/* Floating Action Buttons */}
+      {/* Bottom Left: Go to Top */}
+      <button
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        className="fixed bottom-6 left-6 z-50 w-12 h-12 bg-zinc-900 border border-zinc-800 text-emerald-400 rounded-full flex items-center justify-center shadow-lg hover:border-emerald-500/50 hover:bg-zinc-800 transition-all cursor-pointer"
+        title="Go to Top"
+      >
+        <ArrowRight size={20} className="-rotate-90" />
+      </button>
+
+      {/* Bottom Right: Anonymous Chat Shortcut */}
+      {onNavigateToChat && (
+        <button
+          onClick={onNavigateToChat}
+          className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-emerald-500 text-black rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:bg-emerald-400 hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] transition-all cursor-pointer group"
+          title="Open Secure Anonymous Chat Hub"
+        >
+          <MessageSquare size={24} className="group-hover:scale-110 transition-transform" />
+          <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-ping" />
+          <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full" />
+        </button>
+      )}
     </div>
   );
 };

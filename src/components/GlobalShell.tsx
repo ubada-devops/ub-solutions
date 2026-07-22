@@ -211,24 +211,10 @@ export const GlobalShell: React.FC<GlobalShellProps> = ({
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100 font-mono antialiased flex flex-col relative">
       
-      {/* 1. Entity Switcher Accent Banner */}
+      {/* 1. Entity Jurisdiction Accent Banner */}
       <div className="bg-zinc-950/60 border-b border-zinc-900/40 px-4 py-1.5 flex justify-between items-center text-[9px] backdrop-blur-sm">
         <div className="flex items-center gap-4">
-          <span className="text-zinc-500 font-bold uppercase tracking-wider">Entity Jurisdiction:</span>
-          <div className="flex gap-1.5 bg-zinc-950/40 p-0.5 border border-zinc-900/60 rounded">
-            <button 
-              onClick={() => setSelectedEntity('UB Technologies')}
-              className={`px-2 py-0.5 rounded-sm transition-colors font-bold uppercase cursor-pointer ${selectedEntity === 'UB Technologies' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'text-zinc-600 hover:text-zinc-400'}`}
-            >
-              UB Technologies (Delaware C-Corp)
-            </button>
-            <button 
-              onClick={() => setSelectedEntity('UB CLUB')}
-              className={`px-2 py-0.5 rounded-sm transition-colors font-bold uppercase cursor-pointer ${selectedEntity === 'UB CLUB' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'text-zinc-600 hover:text-zinc-400'}`}
-            >
-              UB CLUB (Singapore Treasury)
-            </button>
-          </div>
+          <span className="text-zinc-500 font-bold uppercase tracking-wider">Entity Jurisdiction: India</span>
         </div>
         <div className="hidden sm:flex items-center gap-3 text-zinc-500">
           <span>UTC TIME: {utcTime}</span>
@@ -245,13 +231,15 @@ export const GlobalShell: React.FC<GlobalShellProps> = ({
             <Menu size={18} />
           </button>
 
-          <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 bg-emerald-500 flex items-center justify-center rounded-sm shadow-md">
-              <Terminal size={14} className="text-black" />
+          <div 
+            onClick={() => { window.scrollTo({ top: 0, behavior: 'smooth' }); window.location.reload(); }}
+            className="flex items-center gap-2.5 cursor-pointer hover:opacity-85 select-none"
+          >
+            <div className="w-8 h-8 bg-emerald-500 flex items-center justify-center rounded-sm shadow-md">
+              <Terminal size={16} className="text-black" />
             </div>
             <div className="flex flex-col">
-              <span className="text-xs font-bold font-display tracking-tight text-white leading-none">UB Solutions</span>
-              <span className="text-[9px] text-emerald-500 font-bold tracking-widest uppercase leading-none mt-1">UB Solutions // 50-PILLAR ENTERPRISE</span>
+              <span className="text-lg font-bold font-display tracking-tight text-white leading-none">UB Solutions</span>
             </div>
           </div>
 
