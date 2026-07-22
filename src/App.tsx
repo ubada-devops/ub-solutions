@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { GlobalShell } from './components/GlobalShell';
+import { LandingPage } from './components/LandingPage';
 import { CEOPanel } from './components/CEOPanel';
 import { CFOPanel } from './components/CFOPanel';
 import { COOPanel } from './components/COOPanel';
@@ -18,6 +19,9 @@ import {
 import { apiService } from './lib/api';
 
 export default function App() {
+  // Landing Page Gate — show landing page first, login only on demand
+  const [showLanding, setShowLanding] = useState(true);
+
   // Global Session Authentication
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   
@@ -144,6 +148,11 @@ export default function App() {
     );
   };
 
+  // If landing page is showing, render the public storefront
+  if (showLanding && !isAuthenticated) {
+    return <LandingPage onNavigateToLogin={() => setShowLanding(false)} />;
+  }
+
   return (
     <GlobalShell
       isAuthenticated={isAuthenticated}
@@ -156,6 +165,7 @@ export default function App() {
       toasts={toasts}
       removeToast={removeToast}
       addToast={addToast}
+      onBackToLanding={() => { setShowLanding(true); }}
     >
       {isLoading ? (
         renderSkeleton()

@@ -19,6 +19,7 @@ interface GlobalShellProps {
   toasts: ToastMessage[];
   removeToast: (id: string) => void;
   addToast: (msg: string, type: 'success' | 'error' | 'warn' | 'info') => void;
+  onBackToLanding?: () => void;
   children: React.ReactNode;
 }
 
@@ -33,6 +34,7 @@ export const GlobalShell: React.FC<GlobalShellProps> = ({
   toasts,
   removeToast,
   addToast,
+  onBackToLanding,
   children
 }) => {
   const [magicToken, setMagicToken] = useState('');
@@ -179,6 +181,15 @@ export const GlobalShell: React.FC<GlobalShellProps> = ({
                 <span>SOC-2 TYPE II COMPLIANT</span>
                 <span>BUILD: v5.0.0-ENTERPRISE</span>
               </div>
+
+              {onBackToLanding && (
+                <button
+                  onClick={onBackToLanding}
+                  className="w-full text-center text-[10px] text-zinc-500 hover:text-emerald-400 transition-colors font-bold uppercase tracking-widest cursor-pointer mt-2"
+                >
+                  ← Back to Home
+                </button>
+              )}
             </div>
           </div>
         </main>
