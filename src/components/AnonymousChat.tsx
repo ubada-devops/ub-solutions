@@ -35,14 +35,21 @@ export const AnonymousChat: React.FC<AnonymousChatProps> = ({
 }) => {
   const isCSuite = ['CEO', 'CFO', 'COO', 'CTO', 'CAIO', 'CMO', 'CSO'].includes(activeRole);
   // 1. Dual-Channel Layout Router state
-  const [activeChannel, setActiveChannel] = useState<'#general-lobby' | '#cto-pipeline' | '#escrow-feed' | 'UB (CEO)' | 'SAM (CFO)' | 'AMMAR (CTO)' | 'UB_DEV_14'>('#general-lobby');
+  const [activeChannel, setActiveChannel] = useState<string>('#dev-common-lobby');
   const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
 
   // Channels and unread counters
   const [unreads, setUnreads] = useState<Record<string, number>>({
-    '#general-lobby': 0,
-    '#cto-pipeline': 2,
-    '#escrow-feed': 1,
+    '#marketing-team': 0,
+    '#web-app-team': 0,
+    '#ai-agents-team': 0,
+    '#data-science-team': 0,
+    '#c-suite-team': 0,
+    '#dev-common-lobby': 0,
+    '#client-common-lobby': 0,
+    '#consulting-team': 0,
+    '#testing-cs-team': 0,
+    '#founders-investors': 0,
     'UB (CEO)': 0,
     'SAM (CFO)': 0,
     'AMMAR (CTO)': 0,
@@ -754,9 +761,16 @@ export const AnonymousChat: React.FC<AnonymousChatProps> = ({
             <span className="text-[9px] text-zinc-400 font-bold uppercase tracking-widest block">Group Rooms</span>
             <div className="space-y-1">
               {[
-                { name: '#general-lobby', label: 'Central Lobby Chat' },
-                { name: '#cto-pipeline', label: 'CTO Engineering' },
-                { name: '#escrow-feed', label: 'Escrow Ledgers' }
+                { name: '#marketing-team', label: 'Marketing Team' },
+                { name: '#web-app-team', label: 'Web + App Team' },
+                { name: '#ai-agents-team', label: 'AI Agents Team' },
+                { name: '#data-science-team', label: 'Data Scientists Team' },
+                { name: '#c-suite-team', label: 'C-Suite Team' },
+                { name: '#dev-common-lobby', label: 'Dev Common Lobby' },
+                { name: '#client-common-lobby', label: 'Client Common Lobby' },
+                { name: '#consulting-team', label: 'Consulting Team' },
+                { name: '#testing-cs-team', label: 'Testing & CS Teams' },
+                { name: '#founders-investors', label: 'Founders & Investors Team' }
               ].map((ch) => (
                 <button
                   key={ch.name}

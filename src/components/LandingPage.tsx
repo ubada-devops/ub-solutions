@@ -4,7 +4,7 @@ import {
   Globe, Shield, Zap, Users, Star, ChevronRight, Monitor,
   Smartphone, Database, Cloud, Cpu, LineChart, Rocket,
   CheckCircle2, ArrowUpRight, Menu, X, Sparkles,
-  TrendingUp, Lock, Layers, GitBranch, Target, MessageSquare
+  TrendingUp, Lock, Layers, GitBranch, Target, MessageSquare, Phone
 } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
 
@@ -601,6 +601,15 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigateToLogin, onN
           <ArrowRight size={20} className="-rotate-90" />
         </button>
       )}
+
+      {/* Bottom Center: Call Now */}
+      <a
+        href="tel:+917483956344"
+        className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-6 py-3 bg-emerald-500 hover:bg-emerald-400 text-black font-mono font-bold text-[10px] uppercase tracking-wider rounded shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] transition-all flex items-center gap-2 cursor-pointer border border-emerald-400"
+      >
+        <Phone size={12} />
+        Call Now
+      </a>
 
       {/* Bottom Right: Anonymous Chat Shortcut */}
       {onNavigateToChat && (
