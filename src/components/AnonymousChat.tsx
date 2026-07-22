@@ -98,6 +98,10 @@ export const AnonymousChat: React.FC<AnonymousChatProps> = ({
 
   // Typing simulator state with JSON payload inspector
   const [typingPayload, setTypingPayload] = useState<{ alias: string; typing: boolean } | null>(null);
+  
+  // Real-time typing status broadcast refs
+  const chatChannelRef = useRef<any>(null);
+  const typingTimeoutRef = useRef<any>(null);
 
   // HSM Cryptography Vault inspector state
   const [showHsmModal, setShowHsmModal] = useState(false);
@@ -195,12 +199,19 @@ export const AnonymousChat: React.FC<AnonymousChatProps> = ({
           });
         }
       )
+      .on('broadcast', { event: 'typing_status' }, ({ payload }) => {
+        if (payload.alias !== chatSenderIdentity) {
+          setTypingPayload(payload.typing ? { alias: payload.alias, typing: true } : null);
+        }
+      })
       .subscribe();
+
+    chatChannelRef.current = chatChannel;
 
     return () => {
       supabase.removeChannel(chatChannel);
     };
-  }, []);
+  }, [chatSenderIdentity]);
 
   // 30s Heartbeat Ping-Pong Protocol simulator
   useEffect(() => {
@@ -214,21 +225,32 @@ export const AnonymousChat: React.FC<AnonymousChatProps> = ({
     return () => clearInterval(pingInterval);
   }, [connectionState]);
 
-  // Real-time typing status aggregation simulation with 3s auto-expiration
-  useEffect(() => {
-    const devAliases = ['UB_DEV_14', 'UB_DEV_04', 'AMMAR', 'SAM'];
-    const triggerTyping = () => {
-      if (Math.random() > 0.4 && connectionState === 'CONNECTED') {
-        const randomAlias = devAliases[Math.floor(Math.random() * devAliases.length)];
-        setTypingPayload({ alias: randomAlias, typing: true });
-        setTimeout(() => {
-          setTypingPayload(null);
-        }, 3000);
+  // Typing status broadcast handler
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setInputMessage(val);
+
+    if (!isSupabaseConfigured) return;
+
+    if (chatChannelRef.current) {
+      chatChannelRef.current.send({
+        type: 'broadcast',
+        event: 'typing_status',
+        payload: { alias: chatSenderIdentity, typing: val.trim().length > 0 }
+      });
+    }
+
+    if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+    typingTimeoutRef.current = setTimeout(() => {
+      if (chatChannelRef.current) {
+        chatChannelRef.current.send({
+          type: 'broadcast',
+          event: 'typing_status',
+          payload: { alias: chatSenderIdentity, typing: false }
+        });
       }
-    };
-    const timer = setInterval(triggerTyping, 10000);
-    return () => clearInterval(timer);
-  }, [connectionState]);
+    }, 3000);
+  };
 
   // 5 Seconds Asynchronous Database Batch Commit simulation
   useEffect(() => {
@@ -958,7 +980,7 @@ export const AnonymousChat: React.FC<AnonymousChatProps> = ({
             <input
               type="text"
               value={inputMessage}
-              onChange={(e) => setInputMessage(e.target.value)}
+              onChange={handleInputChange}
               disabled={isMuted}
               placeholder={isMuted ? `INFRACTION MUTEX ACTIVE: Wait ${muteCountdown}s...` : "Transmit payload through secure ASGI gateway..."}
               className="flex-1 bg-zinc-900 border border-zinc-800 text-xs px-3 py-2.5 outline-none focus:border-emerald-500/50 text-zinc-100 placeholder-zinc-500 rounded"
