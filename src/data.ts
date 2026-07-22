@@ -82,7 +82,9 @@ export const FASTAPI_ASGI_METRICS: FastApiAsgiMetrics = {
   memoryUsageMb: 0
 };
 
-export const REDIS_CLUSTER_NODES: RedisClusterNode[] = [];
+export const REDIS_CLUSTER_NODES: RedisClusterNode[] = [
+  { nodeId: 'node-1-primary', role: 'Master', channelCount: 0, messagesPerSec: 0, pubSubLatencyMs: 0, status: 'HEALTHY' }
+];
 
 export const SUPABASE_TOPOLOGY: SupabaseClusterTopology = {
   primaryWriteNode: 'N/A',
