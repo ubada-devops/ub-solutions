@@ -390,8 +390,9 @@ export const AnonymousChat: React.FC<AnonymousChatProps> = ({
       if (msg.id !== msgId) return msg;
       
       try {
-        if (!msg.payload.startsWith('[POLL_DATA]:')) return msg;
-        const poll = JSON.parse(msg.payload.substring(12));
+        const text = msg.payload || '';
+        if (!text || !text.startsWith('[POLL_DATA]:')) return msg;
+        const poll = JSON.parse(text.substring(12));
         
         if (poll.votedBy.includes(chatSenderIdentity)) {
           addToast('You have already cast your vote on this poll.', 'warn');
@@ -799,9 +800,10 @@ export const AnonymousChat: React.FC<AnonymousChatProps> = ({
                   {(() => {
                     let isPoll = false;
                     let pollObj: any = null;
-                    if (msg.payload.startsWith('[POLL_DATA]:')) {
+                    const text = msg.payload || '';
+                    if (typeof text === 'string' && text.startsWith('[POLL_DATA]:')) {
                       try {
-                        pollObj = JSON.parse(msg.payload.substring(12));
+                        pollObj = JSON.parse(text.substring(12));
                         isPoll = true;
                       } catch (e) {
                         isPoll = false;
@@ -848,19 +850,19 @@ export const AnonymousChat: React.FC<AnonymousChatProps> = ({
                               {pollObj.votedBy.includes(chatSenderIdentity) && <span className="text-emerald-400 font-bold">✓ Voted</span>}
                             </div>
                           </div>
-                        ) : msg.payload.startsWith('```') ? (
+                        ) : typeof text === 'string' && text.startsWith('```') ? (
                           <pre className="overflow-x-auto whitespace-pre-wrap font-mono text-[10px] bg-black/50 p-2 rounded border border-zinc-800">
-                            {msg.payload.replace(/```[a-z]*\n?/g, '')}
+                            {text.replace(/```[a-z]*\n?/g, '')}
                           </pre>
                         ) : (
-                          msg.payload
+                          text
                         )}
                       </div>
                     );
                   })()}
 
                   <button
-                    onClick={() => handleCopyMessage(msg.payload)}
+                    onClick={() => handleCopyMessage(msg.payload || '')}
                     className="text-[8px] text-zinc-500 hover:text-zinc-300 flex items-center gap-0.5 mt-1 cursor-pointer"
                   >
                     <Copy size={8} />

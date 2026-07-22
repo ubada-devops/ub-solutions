@@ -592,13 +592,15 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigateToLogin, onN
 
       {/* Floating Action Buttons */}
       {/* Bottom Left: Go to Top */}
-      <button
-        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        className="fixed bottom-6 left-6 z-50 w-12 h-12 bg-zinc-900 border border-zinc-800 text-emerald-400 rounded-full flex items-center justify-center shadow-lg hover:border-emerald-500/50 hover:bg-zinc-800 transition-all cursor-pointer"
-        title="Go to Top"
-      >
-        <ArrowRight size={20} className="-rotate-90" />
-      </button>
+      {scrollY > 300 && (
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="fixed bottom-6 left-6 z-50 w-12 h-12 bg-zinc-900 border border-zinc-800 text-emerald-400 rounded-full flex items-center justify-center shadow-lg hover:border-emerald-500/50 hover:bg-zinc-800 transition-all cursor-pointer"
+          title="Go to Top"
+        >
+          <ArrowRight size={20} className="-rotate-90" />
+        </button>
+      )}
 
       {/* Bottom Right: Anonymous Chat Shortcut */}
       {onNavigateToChat && (
