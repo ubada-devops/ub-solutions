@@ -158,11 +158,13 @@ export const AnonymousChat: React.FC<AnonymousChatProps> = ({
     "timestamp": Math.floor(Date.now() / 1000)
   });
 
-  const chatEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
 
-  // Auto-scroll chat to bottom
+  // Auto-scroll chat internally only to lock viewport in place
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+    }
   }, [messages, activeChannel]);
 
   // Load chat messages from Supabase on init & subscribe to real-time updates
@@ -838,7 +840,7 @@ export const AnonymousChat: React.FC<AnonymousChatProps> = ({
           </div>
 
           {/* Messages view */}
-          <div className="flex-1 p-4 space-y-4 overflow-y-auto max-h-[380px] min-h-[380px]">
+          <div ref={messagesContainerRef} className="flex-1 p-4 space-y-4 overflow-y-auto max-h-[380px] min-h-[380px]">
             {messages.filter(m => m.channel_id === activeChannel).map((msg) => {
               const isMe = msg.sender_alias === chatSenderIdentity;
               const isSys = msg.isSystem || msg.sender_alias === 'SYSTEM' || msg.sender_alias === 'SYSTEM BOT';
@@ -949,7 +951,6 @@ export const AnonymousChat: React.FC<AnonymousChatProps> = ({
                 </div>
               );
             })}
-            <div ref={chatEndRef} />
           </div>
 
           {/* Live Typing Status Stream Payload Inspector */}
