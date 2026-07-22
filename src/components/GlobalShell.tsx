@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { SessionRole, ToastMessage } from '../types';
 import { ThemeToggle } from './ThemeToggle';
+import { isSupabaseConfigured } from '../supabaseClient';
 
 interface GlobalShellProps {
   isAuthenticated: boolean;
@@ -129,8 +130,8 @@ export const GlobalShell: React.FC<GlobalShellProps> = ({
           <div className="text-[10px] text-zinc-500 flex items-center gap-3">
             <ThemeToggle />
             <div className="hidden sm:flex items-center gap-2">
-              <Wifi size={12} className="text-emerald-500 animate-pulse" />
-              <span>FastAPI ASGI Socket Pool: 10,420 Active</span>
+              <span className={`w-1.5 h-1.5 rounded-full ${isSupabaseConfigured ? 'bg-emerald-500' : 'bg-red-500 animate-pulse'}`} />
+              <span>DB Status: {isSupabaseConfigured ? 'LIVE SUPABASE' : 'OFFLINE MOCK'}</span>
             </div>
           </div>
         </header>
@@ -218,6 +219,13 @@ export const GlobalShell: React.FC<GlobalShellProps> = ({
         </div>
         <div className="hidden sm:flex items-center gap-3 text-zinc-500">
           <span>UTC TIME: {utcTime}</span>
+          <span className="w-[1px] h-3 bg-zinc-800" />
+          <div className="flex items-center gap-1.5 bg-zinc-950/40 px-2 py-0.5 border border-zinc-900/60 rounded">
+            <span className={`w-1.5 h-1.5 rounded-full ${isSupabaseConfigured ? 'bg-emerald-500 animate-pulse' : 'bg-red-500'}`} />
+            <span className="text-[8px] text-zinc-400 uppercase font-bold">
+              DB: {isSupabaseConfigured ? 'Live Supabase' : 'Offline Mock'}
+            </span>
+          </div>
         </div>
       </div>
 
