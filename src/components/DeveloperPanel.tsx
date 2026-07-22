@@ -6,6 +6,7 @@ import {
   BookOpen, LayoutGrid, Eye, Clock, ListChecks
 } from 'lucide-react';
 import { ProjectTask, LeadAssignment } from '../types';
+import { DashboardVisual } from './DashboardVisual';
 
 interface DeveloperPanelProps {
   tasks: ProjectTask[];
@@ -134,6 +135,7 @@ export const DeveloperPanel: React.FC<DeveloperPanelProps> = ({
 
   return (
     <div className="space-y-8 max-w-4xl mx-auto py-4">
+      <DashboardVisual image="/images/dash_dev.png" title="Developer Workspace" subtitle="Sprint Tracker • Task Queue • Payout Estimates" />
       
       {/* 1. Sprints Capacity Banner */}
       {taskCapacity >= 4 && (

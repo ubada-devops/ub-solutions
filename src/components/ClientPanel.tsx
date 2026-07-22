@@ -9,6 +9,7 @@ import {
   ProjectTask, ChangeRequestTicket, ZohoContract, 
   EscrowTransaction, SandboxStatus 
 } from '../types';
+import { DashboardVisual } from './DashboardVisual';
 
 interface ClientPanelProps {
   tasks: ProjectTask[];
@@ -83,6 +84,7 @@ export const ClientPanel: React.FC<ClientPanelProps> = ({
 
   return (
     <div className="space-y-8 max-w-5xl mx-auto py-4 font-mono text-zinc-100">
+      <DashboardVisual image="/images/dash_client.png" title="Client Transparency Gateway" subtitle="Project Timeline • Deliverables • Compliance" />
       
       {/* Tab Switcher */}
       <div className="grid grid-cols-1 md:grid-cols-3 bg-zinc-900 border border-zinc-800 p-1 rounded gap-1">

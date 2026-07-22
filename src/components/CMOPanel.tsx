@@ -3,6 +3,7 @@ import {
   TrendingUp, Megaphone, Target, DollarSign, Users, 
   ArrowUpRight, BarChart2, Plus, Sliders, CheckSquare, Gift, RefreshCw
 } from 'lucide-react';
+import { DashboardVisual } from './DashboardVisual';
 
 interface CMOPanelProps {
   addToast: (msg: string, type: 'success' | 'error' | 'warn' | 'info') => void;
@@ -45,6 +46,7 @@ export const CMOPanel: React.FC<CMOPanelProps> = ({ addToast }) => {
 
   return (
     <div className="space-y-8 max-w-4xl mx-auto py-4">
+      <DashboardVisual image="/images/dash_coo.png" title="CMO Growth Engine" subtitle="Campaign Analytics • SEO Pipeline • Content Strategy" />
       {/* Metrics Banner */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="p-4 bg-zinc-900 border border-zinc-800 rounded-sm">

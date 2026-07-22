@@ -12,6 +12,7 @@ import {
   CLINIC_SCRAPER_ROWS, VAPI_DIAGNOSTICS, SHARED_TEMPLATES, FASTAPI_ASGI_METRICS,
   REDIS_CLUSTER_NODES, SUPABASE_TOPOLOGY, EDGE_REPLICAS, OSS_REWARDS 
 } from '../data';
+import { DashboardVisual } from './DashboardVisual';
 
 interface CTOPanelProps {
   tasks: ProjectTask[];
@@ -103,6 +104,7 @@ export const CTOPanel: React.FC<CTOPanelProps> = ({
 
   return (
     <div className="space-y-8 max-w-5xl mx-auto py-4 font-mono text-zinc-100">
+      <DashboardVisual image="/images/dash_cto.png" title="CTO Engineering Terminal" subtitle="Code Quality • CI/CD Pipeline • Sandbox Orchestration" />
       
       {/* Build Failure Banner */}
       {buildFailureActive && (

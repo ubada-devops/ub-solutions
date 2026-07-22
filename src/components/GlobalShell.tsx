@@ -7,6 +7,7 @@ import {
   FileText, Landmark, MessageSquare, ShieldAlert
 } from 'lucide-react';
 import { SessionRole, ToastMessage } from '../types';
+import { ThemeToggle } from './ThemeToggle';
 
 interface GlobalShellProps {
   isAuthenticated: boolean;
@@ -122,9 +123,12 @@ export const GlobalShell: React.FC<GlobalShellProps> = ({
             </div>
             <span className="text-xs font-bold tracking-[0.2em] text-zinc-400 font-display">UB SOLUTIONS // TERMINAL</span>
           </div>
-          <div className="text-[10px] text-zinc-500 flex items-center gap-2">
-            <Wifi size={12} className="text-emerald-500 animate-pulse" />
-            <span>FastAPI ASGI Socket Pool: 10,420 Active</span>
+          <div className="text-[10px] text-zinc-500 flex items-center gap-3">
+            <ThemeToggle />
+            <div className="hidden sm:flex items-center gap-2">
+              <Wifi size={12} className="text-emerald-500 animate-pulse" />
+              <span>FastAPI ASGI Socket Pool: 10,420 Active</span>
+            </div>
           </div>
         </header>
 
@@ -303,6 +307,9 @@ export const GlobalShell: React.FC<GlobalShellProps> = ({
           </div>
 
           <div className="h-6 w-[1px] bg-zinc-900/60" />
+
+          {/* Theme Toggle */}
+          <ThemeToggle />
 
           {/* User Status Quick-Badge */}
           <div className="hidden md:flex items-center gap-2 px-2.5 py-1.5 bg-zinc-900/30 border border-zinc-850 text-[10px] rounded">

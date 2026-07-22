@@ -7,6 +7,7 @@ import { ProjectTask, LeadAssignment, ZohoContract } from '../types';
 import { 
   PARTNER_AFFILIATES, IEC_REGISTRATION, FREELANCER_NDAS, COLLEGE_PIPELINE 
 } from '../data';
+import { DashboardVisual } from './DashboardVisual';
 
 interface COOPanelProps {
   tasks: ProjectTask[];
@@ -101,6 +102,7 @@ export const COOPanel: React.FC<COOPanelProps> = ({
 
   return (
     <div className="space-y-8 max-w-5xl mx-auto py-4 font-mono text-zinc-100">
+      <DashboardVisual image="/images/dash_coo.png" title="COO Operations Hub" subtitle="Project Pipeline • Lead Management • Resource Allocation" />
       {/* Warning Banner */}
       {hardwareKillActive && (
         <div className="bg-yellow-950/60 border-2 border-yellow-500 text-yellow-200 p-6 rounded flex flex-col md:flex-row items-center justify-between gap-4 animate-pulse shadow-lg">

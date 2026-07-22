@@ -11,6 +11,7 @@ import {
   STRIPE_DCC_RATES, PENNY_DROP_RECORDS, SKYDO_VIRTUAL_ROUTING, SUNDAY_PAYOUT_STATUS,
   SUBCONTRACTOR_TDS_RECORDS, TRAVEL_REIMBURSEMENTS
 } from '../data';
+import { DashboardVisual } from './DashboardVisual';
 
 interface CFOPanelProps {
   tasks: ProjectTask[];
@@ -129,6 +130,7 @@ export const CFOPanel: React.FC<CFOPanelProps> = ({
 
   return (
     <div className="space-y-8 max-w-5xl mx-auto py-4 font-mono text-zinc-100">
+      <DashboardVisual image="/images/dash_cfo.png" title="CFO Ledger Console" subtitle="Financial Operations • Escrow Gateway • Invoice Management" />
       {/* 1. CFO Header Summary Banner */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="p-4 bg-zinc-900 border border-zinc-800 rounded">

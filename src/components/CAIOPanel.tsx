@@ -3,6 +3,7 @@ import {
   Brain, Cpu, Mic, Play, RefreshCw, Layers,
   Activity, Sliders, Radio, AlertCircle, Sparkles, Send, Database, Compass
 } from 'lucide-react';
+import { DashboardVisual } from './DashboardVisual';
 
 interface CAIOPanelProps {
   addToast: (msg: string, type: 'success' | 'error' | 'warn' | 'info') => void;
@@ -58,6 +59,7 @@ export const CAIOPanel: React.FC<CAIOPanelProps> = ({ addToast }) => {
 
   return (
     <div className="space-y-8 max-w-4xl mx-auto py-4">
+      <DashboardVisual image="/images/dash_ceo.png" title="CAIO Agent Control" subtitle="AI Systems • Automation Pipeline • Model Governance" />
       {/* Metrics Banner */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="p-4 bg-zinc-900 border border-zinc-800 rounded-sm">

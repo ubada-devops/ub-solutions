@@ -9,6 +9,7 @@ import {
   BACKUP_ROSTER, MAANG_JOBS, REGIONAL_INCOME, INTERNATIONAL_ENTITIES,
   TARGET_ACCOUNTS, VAPT_AUDIT_CONTROLS, SOC2_CONTROLS 
 } from '../data';
+import { DashboardVisual } from './DashboardVisual';
 
 interface CEOPanelProps {
   tasks: ProjectTask[];
@@ -74,6 +75,7 @@ export const CEOPanel: React.FC<CEOPanelProps> = ({
 
   return (
     <div className="space-y-8 max-w-5xl mx-auto py-4 font-mono text-zinc-100">
+      <DashboardVisual image="/images/dash_ceo.png" title="CEO Command Center" subtitle="Strategic Overview • Kill Switch • Enterprise Monitor" />
       {/* Critical Warning Banner */}
       {systemStatus === 'LOCKOUT' && (
         <div className="bg-red-950/60 border-2 border-red-500 text-red-200 p-6 rounded flex flex-col md:flex-row items-center justify-between gap-4 animate-pulse shadow-lg">

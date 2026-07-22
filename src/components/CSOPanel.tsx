@@ -3,6 +3,7 @@ import {
   ShieldAlert, ShieldCheck, Key, Lock, Eye, AlertOctagon, 
   Terminal, Shield, Radio, CheckSquare, RefreshCw, ServerCrash
 } from 'lucide-react';
+import { DashboardVisual } from './DashboardVisual';
 
 interface CSOPanelProps {
   addToast: (msg: string, type: 'success' | 'error' | 'warn' | 'info') => void;
@@ -37,6 +38,7 @@ export const CSOPanel: React.FC<CSOPanelProps> = ({ addToast }) => {
 
   return (
     <div className="space-y-8 max-w-4xl mx-auto py-4">
+      <DashboardVisual image="/images/dash_cto.png" title="CSO Security Gateway" subtitle="Threat Detection • Zero-Trust • Compliance Audit" />
       {/* Metrics Banner */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="p-4 bg-zinc-900 border border-zinc-800 rounded-sm">
