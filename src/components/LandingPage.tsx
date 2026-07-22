@@ -605,9 +605,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigateToLogin, onN
       {/* Bottom Center: Call Now */}
       <a
         href="tel:+917483956344"
-        className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-6 py-3 bg-emerald-500 hover:bg-emerald-400 text-black font-mono font-bold text-[10px] uppercase tracking-wider rounded shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] transition-all flex items-center gap-2 cursor-pointer border border-emerald-400"
+        className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-12 py-4 bg-emerald-500 hover:bg-emerald-400 text-black font-mono font-bold text-lg uppercase tracking-wider rounded shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] transition-all flex items-center gap-3.5 cursor-pointer border border-emerald-400"
       >
-        <Phone size={12} />
+        <Phone size={24} />
         Call Now
       </a>
 

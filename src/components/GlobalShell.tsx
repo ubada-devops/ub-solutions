@@ -286,28 +286,6 @@ export const GlobalShell: React.FC<GlobalShellProps> = ({
             ))}
           </div>
 
-          <div className="sm:hidden">
-            <select
-              value={activeRole}
-              onChange={(e) => {
-                setActiveRole(e.target.value as SessionRole);
-                addToast(`Switched to ${e.target.value} console.`, 'info');
-              }}
-              className="bg-zinc-950 border border-zinc-800 text-[9px] text-emerald-400 font-bold px-2 py-1 outline-none rounded"
-            >
-              <option value="CEO">CEO (UB)</option>
-              <option value="CFO">CFO (SAM)</option>
-              <option value="COO">COO (SAM)</option>
-              <option value="CTO">CTO (AMMAR)</option>
-              <option value="CAIO">CAIO (Chief AI)</option>
-              <option value="CMO">CMO (Marketing)</option>
-              <option value="CSO">CSO (Security)</option>
-              <option value="DEV">DEV (Anon)</option>
-              <option value="CLIENT">Client</option>
-              <option value="CHAT">Chat Hub</option>
-            </select>
-          </div>
-
           <div className="h-6 w-[1px] bg-zinc-900/60" />
 
           {/* Theme Toggle */}
