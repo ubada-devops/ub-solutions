@@ -204,6 +204,12 @@ export const AnonymousChat: React.FC<AnonymousChatProps> = ({
           setTypingPayload(payload.typing ? { alias: payload.alias, typing: true } : null);
         }
       })
+      .on('broadcast', { event: 'chat_message' }, ({ payload }) => {
+        setMessages(prev => {
+          if (prev.some(m => m.id === payload.id)) return prev;
+          return [...prev, payload].slice(-50);
+        });
+      })
       .subscribe();
 
     chatChannelRef.current = chatChannel;
@@ -437,6 +443,14 @@ export const AnonymousChat: React.FC<AnonymousChatProps> = ({
       senderRole: activeRole,
       text: inputMessage
     });
+
+    if (chatChannelRef.current) {
+      chatChannelRef.current.send({
+        type: 'broadcast',
+        event: 'chat_message',
+        payload: newMsg
+      });
+    }
 
     setMessages(prev => [...prev, newMsg].slice(-50));
     setPendingBatchCount(prev => prev + 1);
