@@ -322,13 +322,13 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigateToLogin, onN
                     {service.icon}
                   </div>
 
-                  <h3 className="text-sm font-bold text-white mb-2 tracking-tight">{service.title}</h3>
-                  <p className="text-[11px] text-zinc-500 leading-relaxed mb-3 font-sans">{service.desc}</p>
+                  <h3 className="text-2xl font-bold text-white mb-3 tracking-tight">{service.title}</h3>
+                  <p className="text-[18px] text-zinc-400 leading-relaxed mb-4 font-sans">{service.desc}</p>
 
-                  <div className="space-y-1">
+                  <div className="space-y-2">
                     {service.features.map((feat, j) => (
-                      <div key={j} className="flex items-center gap-2 text-[10px] text-zinc-500">
-                        <CheckCircle2 size={10} className={activeService === i ? 'text-emerald-500' : 'text-zinc-700'} />
+                      <div key={j} className="flex items-center gap-3 text-[16px] text-zinc-400">
+                        <CheckCircle2 size={14} className={activeService === i ? 'text-emerald-500' : 'text-zinc-700'} />
                         <span>{feat}</span>
                       </div>
                     ))}
@@ -339,7 +339,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigateToLogin, onN
                     href={`https://wa.me/917483956344?text=${encodeURIComponent(service.whatsappText)}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-5 w-full py-2 bg-zinc-900 hover:bg-emerald-500 hover:text-black border border-zinc-800 hover:border-emerald-400 text-zinc-400 hover:font-bold text-[9px] uppercase tracking-wider font-mono rounded flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                    className="mt-6 w-full py-3.5 bg-zinc-900 hover:bg-emerald-500 hover:text-black border border-zinc-800 hover:border-emerald-400 text-zinc-400 hover:font-bold text-[13px] uppercase tracking-wider font-mono rounded flex items-center justify-center gap-1.5 transition-all cursor-pointer"
                   >
                     Enquire Now
                   </a>
@@ -606,7 +606,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigateToLogin, onN
         className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-6 py-3 bg-emerald-500 hover:bg-emerald-400 text-black font-mono font-bold text-[10px] uppercase tracking-wider rounded shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] transition-all flex items-center gap-2 cursor-pointer border border-emerald-400"
       >
         <Phone size={12} />
-        Free Online Consulting Now
+        Call Now
       </a>
 
       {/* Bottom Right: Anonymous Chat Shortcut */}

@@ -70,6 +70,15 @@ export const GlobalShell: React.FC<GlobalShellProps> = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  const [showScrollTop, setShowScrollTop] = useState(false);
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 300);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const handleLoginSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!magicToken.trim()) {
@@ -522,6 +531,32 @@ export const GlobalShell: React.FC<GlobalShellProps> = ({
       )}
 
       {/* Error Alert Toast Container */}
+      {/* Floating Action Buttons */}
+      {/* Bottom Left: Go to Top */}
+      {showScrollTop && (
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="fixed bottom-6 left-6 z-50 w-12 h-12 bg-zinc-900 border border-zinc-800 text-emerald-400 rounded-full flex items-center justify-center shadow-lg hover:border-emerald-500/50 hover:bg-zinc-800 transition-all cursor-pointer"
+          title="Go to Top"
+        >
+          <ArrowRight size={20} className="-rotate-90" />
+        </button>
+      )}
+
+      {/* Bottom Right: Chat Hub shortcut */}
+      <button
+        onClick={() => {
+          setActiveRole('CHAT');
+          addToast('Anonymous Chat Console active.', 'info');
+        }}
+        className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-emerald-500 text-black rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:bg-emerald-400 hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] transition-all cursor-pointer group"
+        title="Open Secure Anonymous Chat Hub"
+      >
+        <MessageSquare size={24} className="group-hover:scale-110 transition-transform" />
+        <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-ping" />
+        <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full" />
+      </button>
+
       <div className="fixed bottom-4 right-4 z-[200] space-y-2 max-w-sm pointer-events-none">
         {toasts.map((toast) => (
           <div 

@@ -348,3 +348,22 @@ code, pre, .font-mono {
 .light-mode .visual-image-container::after {
   border-color: rgba(0,0,0,0.06);
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   GLOBAL FONT SIZE OVERRIDES (2X SCALE FOR SMALL TEXTS)
+   ═══════════════════════════════════════════════════════════════ */
+.text-\[8px\], .text-\[9px\] {
+  font-size: 0.95rem !important;
+}
+
+.text-\[10px\], .text-\[11px\], .text-xs, .text-sm {
+  font-size: 1.15rem !important;
+}
+
+.text-base {
+  font-size: 1.35rem !important;
+}
+
+.text-lg {
+  font-size: 1.55rem !important;
+}
