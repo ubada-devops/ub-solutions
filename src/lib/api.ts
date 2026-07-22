@@ -21,7 +21,9 @@ class ApiService {
   private wsListeners: Array<(event: { type: string; payload: any }) => void> = [];
 
   constructor() {
-    this.connectWebSocket();
+    if (!isSupabaseConfigured) {
+      this.connectWebSocket();
+    }
     this.connectSupabaseRealtime();
   }
 
@@ -173,6 +175,7 @@ class ApiService {
       if (error) {
         console.error('[Supabase] Chat insert error:', error);
       }
+      return;
     }
     if (this.socket && this.socket.readyState === WebSocket.OPEN) {
       this.socket.send(JSON.stringify({ type: 'SEND_MESSAGE', payload: msg }));
