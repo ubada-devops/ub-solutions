@@ -8,6 +8,9 @@ import { CTOPanel } from './components/CTOPanel';
 import { DeveloperPanel } from './components/DeveloperPanel';
 import { ClientPanel } from './components/ClientPanel';
 import { AnonymousChat } from './components/AnonymousChat';
+import { CAIOPanel } from './components/CAIOPanel';
+import { CMOPanel } from './components/CMOPanel';
+import { CSOPanel } from './components/CSOPanel';
 import { 
   ProjectTask, LeadAssignment, EscrowTransaction, 
   ZohoContract, ChangeRequestTicket, SandboxStatus, ToastMessage, SessionRole 
@@ -249,6 +252,18 @@ export default function App() {
               addToast={addToast}
               escrows={escrows}
             />
+          )}
+
+          {activeRole === 'CAIO' && (
+            <CAIOPanel addToast={addToast} />
+          )}
+
+          {activeRole === 'CMO' && (
+            <CMOPanel addToast={addToast} />
+          )}
+
+          {activeRole === 'CSO' && (
+            <CSOPanel addToast={addToast} />
           )}
         </>
       )}

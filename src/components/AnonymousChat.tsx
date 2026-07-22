@@ -32,6 +32,7 @@ export const AnonymousChat: React.FC<AnonymousChatProps> = ({
   addToast,
   escrows = []
 }) => {
+  const isCSuite = ['CEO', 'CFO', 'COO', 'CTO', 'CAIO', 'CMO', 'CSO'].includes(activeRole);
   // 1. Dual-Channel Layout Router state
   const [activeChannel, setActiveChannel] = useState<'#general-lobby' | '#cto-pipeline' | '#escrow-feed' | 'UB (CEO)' | 'SAM (CFO)' | 'AMMAR (CTO)' | 'UB_DEV_14'>('#general-lobby');
   const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
@@ -104,6 +105,45 @@ export const AnonymousChat: React.FC<AnonymousChatProps> = ({
   const [isCodeModalOpen, setIsCodeModalOpen] = useState(false);
   const [codeSnippet, setCodeSnippet] = useState('');
   const [codeLanguage, setCodeLanguage] = useState('typescript');
+
+  // Voting Poll / Quiz states
+  const [isPollModalOpen, setIsPollModalOpen] = useState(false);
+  const [pollQuestion, setPollQuestion] = useState('');
+  const [pollOptions, setPollOptions] = useState(['', '']);
+
+  // Auto-sync sender mask when activeRole changes
+  useEffect(() => {
+    switch (activeRole) {
+      case 'CEO':
+        setChatSenderIdentity('UB');
+        break;
+      case 'CFO':
+      case 'COO':
+        setChatSenderIdentity('SAM');
+        break;
+      case 'CTO':
+        setChatSenderIdentity('AMMAR');
+        break;
+      case 'CAIO':
+        setChatSenderIdentity('UB_CAIO');
+        break;
+      case 'CMO':
+        setChatSenderIdentity('UB_CMO');
+        break;
+      case 'CSO':
+        setChatSenderIdentity('UB_CSO');
+        break;
+      case 'DEV':
+        setChatSenderIdentity('UB_DEV_14');
+        break;
+      case 'CLIENT':
+        setChatSenderIdentity('CardioCare Client');
+        break;
+      default:
+        setChatSenderIdentity('UB_DEV_14');
+        break;
+    }
+  }, [activeRole]);
 
   // Transport Inspector latest packet state
   const [lastTransmittedPacket, setLastTransmittedPacket] = useState<any>({
@@ -340,6 +380,75 @@ export const AnonymousChat: React.FC<AnonymousChatProps> = ({
     addToast(`Message sent via ${transportMode === 'WEBSOCKET' ? 'WebSocket' : 'HTTP Long Polling Fallback'}.`, 'success');
   };
 
+  const handleVote = (msgId: string, optionIndex: number) => {
+    if (activeRole !== 'DEV') {
+      addToast('Voting is restricted to Developers only.', 'error');
+      return;
+    }
+
+    setMessages(prev => prev.map(msg => {
+      if (msg.id !== msgId) return msg;
+      
+      try {
+        if (!msg.payload.startsWith('[POLL_DATA]:')) return msg;
+        const poll = JSON.parse(msg.payload.substring(12));
+        
+        if (poll.votedBy.includes(chatSenderIdentity)) {
+          addToast('You have already cast your vote on this poll.', 'warn');
+          return msg;
+        }
+
+        poll.options[optionIndex].votes += 1;
+        poll.votedBy.push(chatSenderIdentity);
+
+        addToast(`Vote registered for "${poll.options[optionIndex].text}"`, 'success');
+
+        return {
+          ...msg,
+          payload: `[POLL_DATA]:${JSON.stringify(poll)}`
+        };
+      } catch (err) {
+        return msg;
+      }
+    }));
+  };
+
+  const handleCreatePollSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!pollQuestion.trim()) {
+      addToast('Question cannot be empty.', 'error');
+      return;
+    }
+    const filteredOptions = pollOptions.filter(o => o.trim() !== '');
+    if (filteredOptions.length < 2) {
+      addToast('Please provide at least 2 options.', 'error');
+      return;
+    }
+
+    const pollObj = {
+      question: pollQuestion,
+      options: filteredOptions.map(o => ({ text: o, votes: 0 })),
+      votedBy: []
+    };
+
+    const payload = `[POLL_DATA]:${JSON.stringify(pollObj)}`;
+    const uuid = 'msg_' + Math.random().toString(36).substring(2, 11);
+    
+    const newMsg: Message = {
+      id: uuid,
+      channel_id: activeChannel,
+      sender_alias: chatSenderIdentity,
+      payload: payload,
+      timestamp: Date.now()
+    };
+
+    setMessages(prev => [...prev, newMsg].slice(-50));
+    setPollQuestion('');
+    setPollOptions(['', '']);
+    setIsPollModalOpen(false);
+    addToast('Voting poll published to channel.', 'success');
+  };
+
   const handleAttachCode = () => {
     if (!codeSnippet.trim()) {
       addToast('Snippet cannot be empty.', 'error');
@@ -549,6 +658,9 @@ export const AnonymousChat: React.FC<AnonymousChatProps> = ({
               <option value="UB">UB (CEO)</option>
               <option value="SAM">SAM (CFO/COO)</option>
               <option value="AMMAR">AMMAR (CTO)</option>
+              <option value="UB_CAIO">UB_CAIO (Chief AI)</option>
+              <option value="UB_CMO">UB_CMO (Chief Marketing)</option>
+              <option value="UB_CSO">UB_CSO (Chief Security)</option>
               <option value="UB_DEV_14">UB_DEV_14 (Senior Dev)</option>
               <option value="UB_DEV_04">UB_DEV_04 (Core Dev)</option>
               <option value="CardioCare Client">Client Profile</option>
@@ -684,15 +796,68 @@ export const AnonymousChat: React.FC<AnonymousChatProps> = ({
                     )}
                   </div>
 
-                  <div className={`p-3 max-w-sm rounded text-xs leading-relaxed break-words font-mono ${isMe ? 'bg-emerald-500 text-black font-semibold' : 'bg-zinc-950 border border-zinc-800 text-zinc-200'}`}>
-                    {msg.payload.startsWith('```') ? (
-                      <pre className="overflow-x-auto whitespace-pre-wrap font-mono text-[10px] bg-black/50 p-2 rounded border border-zinc-800">
-                        {msg.payload.replace(/```[a-z]*\n?/g, '')}
-                      </pre>
-                    ) : (
-                      msg.payload
-                    )}
-                  </div>
+                  {(() => {
+                    let isPoll = false;
+                    let pollObj: any = null;
+                    if (msg.payload.startsWith('[POLL_DATA]:')) {
+                      try {
+                        pollObj = JSON.parse(msg.payload.substring(12));
+                        isPoll = true;
+                      } catch (e) {
+                        isPoll = false;
+                      }
+                    }
+
+                    return (
+                      <div className={`p-3 max-w-sm rounded text-xs leading-relaxed break-words font-mono ${isMe && !isPoll ? 'bg-emerald-500 text-black font-semibold' : 'bg-zinc-950 border border-zinc-800 text-zinc-200'}`}>
+                        {isPoll && pollObj ? (
+                          <div className="space-y-2.5 w-[240px] sm:w-[280px]">
+                            <div className="text-[9px] font-bold text-emerald-400 uppercase tracking-widest border-b border-zinc-900 pb-1.5 flex items-center gap-1.5">
+                              <Radio size={12} className="animate-pulse" />
+                              Interactive Team Poll
+                            </div>
+                            <div className="text-xs font-semibold text-white">{pollObj.question}</div>
+                            <div className="space-y-1.5">
+                              {pollObj.options.map((opt: any, idx: number) => {
+                                const totalVotes = pollObj.options.reduce((acc: number, o: any) => acc + o.votes, 0);
+                                const percentage = totalVotes > 0 ? Math.round((opt.votes / totalVotes) * 100) : 0;
+                                const hasVoted = pollObj.votedBy.includes(chatSenderIdentity);
+                                
+                                return (
+                                  <button
+                                    type="button"
+                                    key={idx}
+                                    onClick={() => handleVote(msg.id, idx)}
+                                    disabled={hasVoted}
+                                    className="w-full text-left p-2 rounded bg-zinc-900 border border-zinc-800 hover:border-emerald-500/40 transition-all flex flex-col relative overflow-hidden group cursor-pointer disabled:cursor-default"
+                                  >
+                                    <div 
+                                      className="absolute left-0 top-0 bottom-0 bg-emerald-500/10 transition-all duration-500" 
+                                      style={{ width: `${percentage}%` }}
+                                    />
+                                    <div className="flex justify-between items-center relative z-10 w-full text-[10px]">
+                                      <span className="font-medium text-zinc-300 group-hover:text-white transition-colors">{opt.text}</span>
+                                      <span className="text-emerald-400 font-bold">{opt.votes} ({percentage}%)</span>
+                                    </div>
+                                  </button>
+                                );
+                              })}
+                            </div>
+                            <div className="text-[9px] text-zinc-500 flex justify-between">
+                              <span>Total Votes: {pollObj.options.reduce((acc: number, o: any) => acc + o.votes, 0)}</span>
+                              {pollObj.votedBy.includes(chatSenderIdentity) && <span className="text-emerald-400 font-bold">✓ Voted</span>}
+                            </div>
+                          </div>
+                        ) : msg.payload.startsWith('```') ? (
+                          <pre className="overflow-x-auto whitespace-pre-wrap font-mono text-[10px] bg-black/50 p-2 rounded border border-zinc-800">
+                            {msg.payload.replace(/```[a-z]*\n?/g, '')}
+                          </pre>
+                        ) : (
+                          msg.payload
+                        )}
+                      </div>
+                    );
+                  })()}
 
                   <button
                     onClick={() => handleCopyMessage(msg.payload)}
@@ -733,6 +898,18 @@ export const AnonymousChat: React.FC<AnonymousChatProps> = ({
             >
               <Code size={16} />
             </button>
+
+            {/* C-suite Poll / Quiz attachment */}
+            {isCSuite && (
+              <button
+                type="button"
+                onClick={() => setIsPollModalOpen(true)}
+                className="p-2.5 bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-emerald-400 hover:border-emerald-500/30 transition-all rounded cursor-pointer"
+                title="Create custom team poll / quiz (C-suite only)"
+              >
+                <Radio size={16} />
+              </button>
+            )}
 
             <input
               type="text"
@@ -871,6 +1048,86 @@ export const AnonymousChat: React.FC<AnonymousChatProps> = ({
                 </button>
               </div>
             </div>
+          </div>
+        </>
+      )}
+
+      {/* Poll Creator Modal */}
+      {isPollModalOpen && (
+        <>
+          <div className="fixed inset-0 bg-black/80 z-[100] backdrop-blur-sm" onClick={() => setIsPollModalOpen(false)} />
+          <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg bg-zinc-950 border border-zinc-800 p-6 z-[110] font-mono shadow-2xl rounded text-zinc-100">
+            <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-2">Create Team Decision Poll</h3>
+            <p className="text-xs text-zinc-400 mb-4">C-suite exclusive feature. Solicit feedback and consensus from developers directly within the encrypted channel.</p>
+
+            <form onSubmit={handleCreatePollSubmit} className="space-y-4">
+              <div>
+                <label className="text-[10px] text-zinc-400 uppercase font-bold block mb-1">Question / Decision Topic</label>
+                <input
+                  type="text"
+                  required
+                  value={pollQuestion}
+                  onChange={(e) => setPollQuestion(e.target.value)}
+                  placeholder="e.g. Which framework should we use for the new client project?"
+                  className="w-full bg-zinc-900 border border-zinc-800 text-xs p-2.5 text-zinc-100 outline-none rounded focus:border-emerald-500/50"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-[10px] text-zinc-400 uppercase font-bold block">Options (At least 2)</label>
+                {pollOptions.map((opt, idx) => (
+                  <div key={idx} className="flex gap-2">
+                    <input
+                      type="text"
+                      required={idx < 2}
+                      value={opt}
+                      onChange={(e) => {
+                        const newOpts = [...pollOptions];
+                        newOpts[idx] = e.target.value;
+                        setPollOptions(newOpts);
+                      }}
+                      placeholder={`Option ${idx + 1}`}
+                      className="flex-1 bg-zinc-900 border border-zinc-800 text-xs p-2 text-zinc-100 outline-none rounded focus:border-emerald-500/50"
+                    />
+                    {pollOptions.length > 2 && (
+                      <button
+                        type="button"
+                        onClick={() => setPollOptions(pollOptions.filter((_, i) => i !== idx))}
+                        className="px-2 text-xs text-red-400 hover:text-red-300"
+                      >
+                        Remove
+                      </button>
+                    )}
+                  </div>
+                ))}
+
+                {pollOptions.length < 5 && (
+                  <button
+                    type="button"
+                    onClick={() => setPollOptions([...pollOptions, ''])}
+                    className="text-[10px] text-emerald-400 hover:underline uppercase font-bold block mt-1"
+                  >
+                    + Add Option
+                  </button>
+                )}
+              </div>
+
+              <div className="flex justify-end gap-2 pt-2 border-t border-zinc-900">
+                <button
+                  type="button"
+                  onClick={() => setIsPollModalOpen(false)}
+                  className="px-4 py-2 bg-zinc-900 border border-zinc-800 text-xs text-zinc-400 uppercase font-bold rounded cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-emerald-500 text-black text-xs uppercase font-bold hover:bg-emerald-400 rounded cursor-pointer"
+                >
+                  Publish Poll
+                </button>
+              </div>
+            </form>
           </div>
         </>
       )}

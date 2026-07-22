@@ -4,7 +4,7 @@ import {
   Wifi, HelpCircle, Key, Activity, ShieldCheck, 
   Settings, UserCheck, AlertOctagon, HelpCircle as HelpIcon,
   ChevronRight, ArrowRight, CornerDownRight, CheckCircle2,
-  FileText, Landmark, MessageSquare, ShieldAlert
+  FileText, Landmark, MessageSquare, ShieldAlert, Brain, TrendingUp
 } from 'lucide-react';
 import { SessionRole, ToastMessage } from '../types';
 import { ThemeToggle } from './ThemeToggle';
@@ -103,6 +103,9 @@ export const GlobalShell: React.FC<GlobalShellProps> = ({
       case 'CFO': return 'SAM // CFO';
       case 'COO': return 'SAM // COO';
       case 'CTO': return 'AMMAR // CTO';
+      case 'CAIO': return 'UB // CAIO';
+      case 'CMO': return 'UB // CMO';
+      case 'CSO': return 'UB // CSO';
       case 'DEV': return 'UB_DEV_14';
       case 'CLIENT': return 'UB Technologies Engineer'; // Client Redacted Middleware (Req #33)
       case 'CHAT': return 'Anonymous Chat Hub';
@@ -273,7 +276,7 @@ export const GlobalShell: React.FC<GlobalShellProps> = ({
 
           {/* Role Switcher */}
           <div className="hidden sm:flex items-center gap-1 bg-zinc-950/60 border border-zinc-900/60 p-0.5 rounded">
-            {(['CEO', 'CFO', 'COO', 'CTO', 'DEV', 'CLIENT', 'CHAT'] as SessionRole[]).map(role => (
+            {(['CEO', 'CFO', 'COO', 'CTO', 'CAIO', 'CMO', 'CSO', 'DEV', 'CLIENT', 'CHAT'] as SessionRole[]).map(role => (
               <button
                 key={role}
                 onClick={() => {
@@ -300,6 +303,9 @@ export const GlobalShell: React.FC<GlobalShellProps> = ({
               <option value="CFO">CFO (SAM)</option>
               <option value="COO">COO (SAM)</option>
               <option value="CTO">CTO (AMMAR)</option>
+              <option value="CAIO">CAIO (Chief AI)</option>
+              <option value="CMO">CMO (Marketing)</option>
+              <option value="CSO">CSO (Security)</option>
               <option value="DEV">DEV (Anon)</option>
               <option value="CLIENT">Client</option>
               <option value="CHAT">Chat Hub</option>
@@ -384,7 +390,7 @@ export const GlobalShell: React.FC<GlobalShellProps> = ({
 
                 <div className="space-y-1">
                   <div className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest px-2 mb-2">Workspace Roles</div>
-                  {(['CEO', 'CFO', 'COO', 'CTO', 'DEV', 'CLIENT', 'CHAT'] as SessionRole[]).map(role => (
+                  {(['CEO', 'CFO', 'COO', 'CTO', 'CAIO', 'CMO', 'CSO', 'DEV', 'CLIENT', 'CHAT'] as SessionRole[]).map(role => (
                     <button
                       key={role}
                       onClick={() => {
@@ -428,12 +434,33 @@ export const GlobalShell: React.FC<GlobalShellProps> = ({
             >
               <Settings size={18} />
             </button>
-            <button 
+             <button 
               onClick={() => { setActiveRole('CTO'); addToast('CTO workspace active.', 'info'); }}
               className={`p-2.5 rounded transition-all hover:text-emerald-400 cursor-pointer ${activeRole === 'CTO' ? 'text-emerald-400 bg-zinc-900 border border-zinc-805' : ''}`}
               title="CTO Terminal (AMMAR)"
             >
               <UserCheck size={18} />
+            </button>
+            <button 
+              onClick={() => { setActiveRole('CAIO'); addToast('CAIO workspace active.', 'info'); }}
+              className={`p-2.5 rounded transition-all hover:text-emerald-400 cursor-pointer ${activeRole === 'CAIO' ? 'text-emerald-400 bg-zinc-900 border border-zinc-805' : ''}`}
+              title="CAIO Agent Control"
+            >
+              <Brain size={18} />
+            </button>
+            <button 
+              onClick={() => { setActiveRole('CMO'); addToast('CMO campaigns active.', 'info'); }}
+              className={`p-2.5 rounded transition-all hover:text-emerald-400 cursor-pointer ${activeRole === 'CMO' ? 'text-emerald-400 bg-zinc-900 border border-zinc-805' : ''}`}
+              title="CMO Campaigns"
+            >
+              <TrendingUp size={18} />
+            </button>
+            <button 
+              onClick={() => { setActiveRole('CSO'); addToast('CSO security active.', 'info'); }}
+              className={`p-2.5 rounded transition-all hover:text-emerald-400 cursor-pointer ${activeRole === 'CSO' ? 'text-emerald-400 bg-zinc-900 border border-zinc-805' : ''}`}
+              title="CSO Intrusion Guard"
+            >
+              <ShieldAlert size={18} />
             </button>
             <button 
               onClick={() => { setActiveRole('DEV'); addToast('Developer workbench active.', 'info'); }}
