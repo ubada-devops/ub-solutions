@@ -189,7 +189,7 @@ export const AnonymousChat: React.FC<AnonymousChatProps> = ({
               sender_alias: newMsg.sender_alias,
               payload: newMsg.payload,
               timestamp: Number(newMsg.timestamp),
-              isSystem: newMsg.isSystem
+              isSystem: Boolean(newMsg.issystem || newMsg.isSystem)
             };
             return [...prev, msg].slice(-50);
           });

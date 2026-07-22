@@ -148,7 +148,7 @@ class ApiService {
           sender_alias: item.sender_alias,
           payload: item.payload,
           timestamp: Number(item.timestamp),
-          isSystem: item.isSystem
+          isSystem: Boolean(item.issystem || item.isSystem)
         }));
       }
     }
@@ -167,7 +167,7 @@ class ApiService {
         sender_alias: msg.sender,
         payload: msg.text,
         timestamp: Date.now(),
-        isSystem: msg.type === 'system'
+        issystem: msg.type === 'system'
       };
       const { error } = await supabase.from('chat_messages').insert([dbMsg]);
       if (error) {
