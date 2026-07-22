@@ -322,13 +322,13 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigateToLogin, onN
                     {service.icon}
                   </div>
 
-                  <h3 className="text-2xl font-bold text-white mb-3 tracking-tight">{service.title}</h3>
-                  <p className="text-[18px] text-zinc-400 leading-relaxed mb-4 font-sans">{service.desc}</p>
+                  <h3 className="text-xl font-bold text-white mb-2.5 tracking-tight">{service.title}</h3>
+                  <p className="text-[13px] text-zinc-400 leading-relaxed mb-3 font-sans">{service.desc}</p>
 
-                  <div className="space-y-2">
+                  <div className="space-y-1.5">
                     {service.features.map((feat, j) => (
-                      <div key={j} className="flex items-center gap-3 text-[16px] text-zinc-400">
-                        <CheckCircle2 size={14} className={activeService === i ? 'text-emerald-500' : 'text-zinc-700'} />
+                      <div key={j} className="flex items-center gap-2.5 text-[12px] text-zinc-400">
+                        <CheckCircle2 size={11} className={activeService === i ? 'text-emerald-500' : 'text-zinc-700'} />
                         <span>{feat}</span>
                       </div>
                     ))}
@@ -339,7 +339,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigateToLogin, onN
                     href={`https://wa.me/917483956344?text=${encodeURIComponent(service.whatsappText)}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-6 w-full py-3.5 bg-zinc-900 hover:bg-emerald-500 hover:text-black border border-zinc-800 hover:border-emerald-400 text-zinc-400 hover:font-bold text-[13px] uppercase tracking-wider font-mono rounded flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                    className="mt-5 w-full py-2 bg-zinc-900 hover:bg-emerald-500 hover:text-black border border-zinc-800 hover:border-emerald-400 text-zinc-400 hover:font-bold text-[10px] uppercase tracking-wider font-mono rounded flex items-center justify-center gap-1.5 transition-all cursor-pointer"
                   >
                     Enquire Now
                   </a>
